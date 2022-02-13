@@ -1,0 +1,166 @@
+*{
+    box-sizing: border-box;
+    outline: none;
+    margin: 0;
+    padding: 0;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.container {
+    /* background: yellow; */
+    display: inline-block;
+    width: 80vw;
+    padding: 1rem;
+    margin: 0.5rem;
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(201,193,201,1);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(201,193,201,1);
+    box-shadow: 5px 5px 10px 3px rgba(201,193,201,1);
+}
+
+#app {
+    width: 80vw;
+    display: flex;
+    flex-wrap: wrap;
+}
+input[name="query"] {
+    padding: 0.5rem;
+    margin-right: 0.5rem;
+    min-width: 40%;
+    border-radius: 0.3rem;
+    outline: none;
+    border: none;
+    background: transparent;
+}
+
+.search_bar{
+    min-width: 30%;
+    border-radius: 0.3rem;
+    border: 1px solid rgb(168, 166, 166);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 0.7rem;
+    margin-right: 2rem;
+}
+
+.search_header{
+    display: flex;
+}
+select[name="filter"] {
+    padding: 0.5rem;
+    border:1px solid rgb(139, 137, 137);
+    border-radius: 0.3rem;
+    outline: none;
+    background: transparent;
+}
+
+select option {
+    text-transform: capitalize;
+}
+
+.item {
+    display: inline-block;
+    vertical-align: top;
+    cursor: pointer;
+    /* width: 245px; */
+    width: 31%;
+    height: 350px;
+    /* overflow-y: scroll; */
+    border-top: 0.2rem solid darkslateblue;
+    padding: 1rem;
+    margin: 0.76rem;
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(201,193,201,1);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(201,193,201,1);
+    box-shadow: 5px 5px 10px 3px rgba(201,193,201,1);
+}
+  
+.item:hover {
+    transform: scale(1.03);
+}
+.item .item-image{
+    width: 100%;
+    height: 40%;
+}
+.item .item-name {
+    font-weight: bold;
+    color: darkslateblue;
+}
+
+.item .item-description {
+    font-weight: normal;
+    padding: 10px 0;
+    /* opacity: 0.80; */
+}
+
+.item .item-dateLastEdited {
+    font-weight: lighter;
+    opacity: 0.85;
+    font-size: 14px;
+}
+
+#history {
+    margin-top: 0.2rem;
+    padding: 0.5rem 0rem;
+}
+#history div {
+    display: block;
+    padding: 0.3rem 0rem;
+    margin: 0.5rem 0rem;
+    font-size: smaller;
+}
+#history span {
+    padding: 0.3rem 0.5rem;
+    margin: 0.2rem;
+}
+
+#history .query-chip {
+    background-color: darkslateblue;
+    color: white
+}
+#history .filter-chip {
+    background-color: darkslategray;
+    color: white;
+}
+table {
+    box-sizing: border-box;
+    padding: 1rem;
+    width: 80vw;
+    margin: 0.5rem;
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(201,193,201,1);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(201,193,201,1);
+    box-shadow: 5px 5px 10px 3px rgba(201,193,201,1);
+}
+table thead {
+    font-size: 1rem;
+    text-transform: capitalize;
+    color: white;
+    text-align: left;
+    background-color: darkslateblue;
+}
+table thead th {
+    padding: 0.5rem;
+}
+table tbody tr:nth-of-type(even) {
+    background-color: lightsteelblue;
+}
+
+table tbody tr:hover {
+    cursor: pointer;
+    background-color: lightgray;
+}
+table tbody tr td {
+    padding: 0.5rem;
+}
+
+
+
+
+
+
+
+
+
