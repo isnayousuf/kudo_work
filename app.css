@@ -156,6 +156,35 @@ table tbody tr td {
     padding: 0.5rem;
 }
 
+@media (min-width: 481px) and (max-width: 800px) {
+    .container{
+        width: 90vw;
+        
+     }
+     .search_bar{
+         min-width: 70%;
+     }
+     .item{
+        width: 47.3%;
+        margin: 20px 0;
+    }
+    .item:nth-of-type(odd) {
+        margin-left: 0.3rem;
+    }
+    .item:nth-of-type(even) {
+        margin-left: 2rem;
+    }
+     #app{
+        /* padding: 1rem; */
+         width: 90vw;  
+         padding: 0;
+     } 
+     table{
+        width: 90vw;
+    }
+    
+ 
+}
 
 
 
