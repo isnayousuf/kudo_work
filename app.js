@@ -1,4 +1,4 @@
-
+const app = document.getElementById("app")
 function fetchItems() {
   let items = JSON.parse(data);
   return items
@@ -8,12 +8,16 @@ function Store() {
    
    this._original_items = fetchItems();
    this._store = window.localStorage;
-   this._items = this._original_items;
-   
+  //  this._items = this._original_items;
+    this._items = new Paginator(this._original_items).page();
+
+
    this.init = function() {
-       this._items = fetchItems();
+      //  this._items = fetchItems();
+      this._items = new Paginator(fetchItems()).page();
        this.items();
    }
+
    this.items = function() {
      return this._items;
    }
@@ -21,9 +25,11 @@ function Store() {
    this.search = function(type, query) {
      this.setItem(type, query)
      // search logic here
-     this.init();
-     this._items = this._items.filter(item => item.name.includes(query) || item.description.includes(query))
-   }
+     this.init()
+    //  this._items = this._items.filter(item => item.name.includes(query) || item.description.includes(query))
+    this._items = this._original_items.filter(item => item.name.includes(query) || item.description.includes(query))
+    this._items = new Paginator(this._items).page() 
+  }
 
    this.sort = function(type, query) {
        this.setItem(type, query)
@@ -53,10 +59,14 @@ function Store() {
    this.clearAll = function() {
      this._store.clear()
    }
+   this.hookPageChange = function(new_items) {
+    this._items = new_items;
+  } 
    
  }
 
 let store = new Store();
+// renderApp(app);
 function renderItem(item) {
    let dv = document.createElement('div');
    dv.classList.add("item")
@@ -133,7 +143,7 @@ function renderApp(app) {
    renderTable(app)
    setHistoryData(store)
 }
-const app = document.getElementById("app")
+// const app = document.getElementById("app")
  
 function setHistoryData(store) {
    const query_input = document.getElementById("query");
@@ -187,8 +197,107 @@ window.addEventListener('DOMContentLoaded', (event) => {
    setHistoryChips();
    populateFilterOptions(store.items())
 });
+
+
 renderApp(app);
  
+
+function Paginator(object) {
+  this.object = object
+  this.pages = []
+  this._current = 1
+  this._next = 1
+  this._previous = 1
+  this._last = 1
+  this._container_id = 'pagination'
+  this._container = null
+  this._paginator_class = "easy-paginator"
+  this._step_class = "easy-paginator-step"
+  this._current_class = "current"
+  this._step_cb = null
+  this._step = 10
+
+  this.is_object_safe = function() {
+      return Symbol.iterator in Object(this.object)
+  }
+  this.init = function() {
+      this.is_object_safe() ? this.config() : this.error()
+  }
+  this.config = function() {
+      this.pages = object
+      this._container_id = "pagination"
+      this._current = 1
+      this.render();
+  }
+  this.error = function() {
+      throw 'Invalid paginator configuration.'
+  }
+  this.count = function() {
+      return this.pages.length
+  }
+  this.last = function() {
+      return this.count()
+  }
+  this.current = function() {
+      return this._current;
+  }
+  this.next = function() {
+      this._current += 1;
+      return this._current
+  }
+  this.previous = function() {
+      this._current -= 1
+      return this._current
+  }
+  this.container = function() {
+      this._container = document.getElementById(this._container_id)
+      if (!this._container) {
+          this._container = document.createElement('div')
+      }
+      return this._container
+  }
+
+  this.render = function() {
+      let p = document.createElement('div')
+      p.classList.add(this._paginator_class)
+      this.container().innerHTML = "";
+      for (let i=1; i<= this.count(); i+=this._step) {
+          console.log("rendering pagination")
+          let step = document.createElement('a')
+          step.classList.add(this._step_class)
+          page = Math.ceil(i / this._step);
+          step.dataset.page = page
+          let start = (page * this._step) - this._step
+          step.dataset.start = start
+          step.dataset.end = start + this._step
+          if (this.current() == page) {
+              step.classList.add(this._current_class)
+          }
+          step.innerText = page;
+          step.addEventListener('click', this.step_cb);
+          p.appendChild(step)
+      }
+      this.container().appendChild(p)
+  }
+
+  this.step_cb = (ev) => {
+      let curr = ev.target.dataset.page
+      this._current = curr
+      let items = this.page(ev.target.dataset.start, ev.target.dataset.end)
+      store.hookPageChange(items)
+      renderApp(app)
+      this.render()
+  }
+
+  this.page = function(start=0, end=this._step) {
+    return this.object.slice(start,end)
+  }
+
+  this.init();
+
+}
+  
+
 const query_input = document.getElementById("query");
 const filter_select = document.getElementById("filter");
 query_input.addEventListener('keyup', function(e) {
