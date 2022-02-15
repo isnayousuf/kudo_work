@@ -169,7 +169,9 @@ table tbody tr td {
     background-color: darkslateblue;
     color: white;
 }
-
+.item-query-text:not(:empty) {
+    background-color: goldenrod;
+}
 @media (min-width: 481px) and (max-width: 800px) {
     .container{
         width: 90vw;

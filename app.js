@@ -11,6 +11,8 @@ function Store() {
   //  this._items = this._original_items;
     this._items = new Paginator(this._original_items).page();
 
+    this._query = ""
+
 
    this.init = function() {
       //  this._items = fetchItems();
@@ -24,10 +26,14 @@ function Store() {
    
    this.search = function(type, query) {
      this.setItem(type, query)
+     this._query = query
      // search logic here
      this.init()
+     let q = query.toLowerCase()
+    this._items = this._original_items.filter(item =>
+         item.name.toLowerCase().includes(q) || item.description.toLowerCase().includes(q)
+        )
     //  this._items = this._items.filter(item => item.name.includes(query) || item.description.includes(query))
-    this._items = this._original_items.filter(item => item.name.includes(query) || item.description.includes(query))
     this._items = new Paginator(this._items).page() 
   }
 
@@ -62,8 +68,16 @@ function Store() {
    this.hookPageChange = function(new_items) {
     this._items = new_items;
   } 
+
+  this.query = function() {
+    return this._query
+  }
+  this.setQuery = function(q) {
+    this._query = q
+  }
    
  }
+
 
 let store = new Store();
 // renderApp(app);
@@ -84,7 +98,18 @@ function renderItem(item) {
          div.classList.add('item-image');
      }
      else{
-      div.innerText = item[k]
+        let text = item[k]
+        let query = store.query()
+        let lquery = store.query().toLowerCase();
+        if (store.query() && item[k].toLowerCase().includes(lquery)){
+          let reg = new RegExp(query, "i");
+          let replaces = text.match(reg)
+          for (rep of replaces) {
+            text = text.toString().replaceAll(rep, `<span class='item-query-text'>${rep}</span>`)
+          }
+        }
+        div.innerHTML = text
+    //   div.innerText = item[k]
      }
      div.classList.add(`item-${k}`)
   //    div.innerText = item[k]
@@ -301,11 +326,12 @@ function Paginator(object) {
 const query_input = document.getElementById("query");
 const filter_select = document.getElementById("filter");
 query_input.addEventListener('keyup', function(e) {
-   if (this.value.trim().length >= 1) {
+   if (this.value.trim().length > 0) {
        store.search(this.name, this.value)
        
    }else{
        store.init();
+       store.setQuery("")
    }
    renderApp(app)
 });
